@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Campus Assistant</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(-45deg, #6a11cb, #2575fc, #ff758c, #ff7eb3);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    header {
+      text-align: center;
+      padding: 20px;
+      color: white;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 1px;
+    }
+    header p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 80vh;
+      max-width: 600px;
+      margin: 20px auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      background: #f9f9f9;
+    }
+
+    .message {
+      margin: 8px 0;
+      padding: 10px 14px;
+      border-radius: 15px;
+      max-width: 75%;
+      word-wrap: break-word;
+      transition: all 0.3s ease;
+    }
+
+    .user {
+      background: #2575fc;
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 0;
+    }
+
+    .bot {
+      background: #ecf0f1;
+      margin-right: auto;
+      border-bottom-left-radius: 0;
+    }
+
+    .input-container {
+      display: flex;
+      border-top: 1px solid #ddd;
+      background: #fff;
+    }
+
+    input {
+      flex: 1;
+      border: none;
+      padding: 15px;
+      border-radius: 0;
+      outline: none;
+      font-size: 16px;
+    }
+
+    button {
+      background: #2575fc;
+      color: white;
+      border: none;
+      padding: 15px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #1b5dc9;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Smart Campus Assistant</h1>
+    <p>Your AI chatbot for campus information</p>
+  </header>
+
+  <div class="chat-container">
+    <div class="messages" id="messages"></div>
+    <div class="input-container">
+      <input type="text" id="userInput" placeholder="Ask about schedules, dining, library...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const messages = document.getElementById("messages");
+
+    function appendMessage(text, sender) {
+      const msg = document.createElement("div");
+      msg.classList.add("message", sender);
+      msg.innerText = text;
+      messages.appendChild(msg);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (text === "") return;
+
+      appendMessage(text, "user");
+      input.value = "";
+
+      setTimeout(() => {
+        let reply = "I’ll fetch that info for you...";
+        const t = text.toLowerCase();
+        if (t.includes("library")) reply = "The library is open from 9 AM to 8 PM.";
+        else if (t.includes("dining")) reply = "Dining hall hours: Breakfast 7-10 AM, Lunch 12-3 PM, Dinner 7-10 PM.";
+        else if (t.includes("schedule")) reply = "Check your class schedule on the campus portal.";
+        else if (t.includes("admin")) reply = "Administrative office hours: Mon-Fri, 10 AM - 5 PM.";
+        appendMessage(reply, "bot");
+      }, 800);
+    }
+
+    document.getElementById("userInput").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") sendMessage();
+    });
+  </script>
+</body>
+</html>
